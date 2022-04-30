@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Post Details
+{% endblock %}
+
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'blog/post-detail.css' %}">
+{% endblock %}
+
+
+{% block content %}
+    <section id="summary">
+        <h2>Post title</h2>
+        <article>
+            <img src="{% static 'blog/images/image1.jpg' %}" alt="post image">
+            <address>By Maximilian</address>
+            <div>
+                Last updated on <time>July 10th</time>
+            </div>
+        </article>
+    </section>
+
+    <main>
+        <p>
+            Messor peregrinationes, tanquam brevis absolutio.
+            Messis acceleratrix ducunt ad germanus rumor.
+            Secundus saga absolute quaestios agripeta est.
+        </p>
+        <p>
+            Messor peregrinationes, tanquam brevis absolutio.
+            Messis acceleratrix ducunt ad germanus rumor.
+            Secundus saga absolute quaestios agripeta est.
+        </p>
+        <p>
+            Messor peregrinationes, tanquam brevis absolutio.
+            Messis acceleratrix ducunt ad germanus rumor.
+            Secundus saga absolute quaestios agripeta est.
+        </p>
+    </main>
+{% endblock %}

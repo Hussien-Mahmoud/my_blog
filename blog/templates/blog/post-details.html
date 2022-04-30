@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-Post Details
+{{ post.title }}
 {% endblock %}
 
 
@@ -13,31 +13,17 @@ Post Details
 
 {% block content %}
     <section id="summary">
-        <h2>Post title</h2>
+        <h2>{{ post.title }}</h2>
         <article>
-            <img src="{% static 'blog/images/image1.jpg' %}" alt="post image">
-            <address>By Maximilian</address>
+            <img src="{% static 'blog/images/'|add:post.image %}" alt="post image">
+            <address>By {{ post.author }}</address>
             <div>
-                Last updated on <time>July 10th</time>
+                Last updated on <time>{{ post.date|date:'F d' }}</time>
             </div>
         </article>
     </section>
 
     <main>
-        <p>
-            Messor peregrinationes, tanquam brevis absolutio.
-            Messis acceleratrix ducunt ad germanus rumor.
-            Secundus saga absolute quaestios agripeta est.
-        </p>
-        <p>
-            Messor peregrinationes, tanquam brevis absolutio.
-            Messis acceleratrix ducunt ad germanus rumor.
-            Secundus saga absolute quaestios agripeta est.
-        </p>
-        <p>
-            Messor peregrinationes, tanquam brevis absolutio.
-            Messis acceleratrix ducunt ad germanus rumor.
-            Secundus saga absolute quaestios agripeta est.
-        </p>
+        {{ post.content }}
     </main>
 {% endblock %}

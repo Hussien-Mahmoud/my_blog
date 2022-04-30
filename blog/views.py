@@ -26,27 +26,6 @@ posts = [
 
     },
     {
-        "slug": "hike-in-the-mountains",
-        "image": "image2.jpg",
-        "author": "Maximilian",
-        "date": date(2021, 7, 21),
-        "title": "Mountain Hiking",
-        "excerpt": "There's nothing like the views you get when hiking in the mountains! And I wasn't even prepared for what happened whilst I was enjoying the view!",
-        "content": """
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis nobis
-              aperiam est praesentium, quos iste consequuntur omnis exercitationem quam
-              velit labore vero culpa ad mollitia? Quis architecto ipsam nemo. Odio.
-
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis nobis
-              aperiam est praesentium, quos iste consequuntur omnis exercitationem quam
-              velit labore vero culpa ad mollitia? Quis architecto ipsam nemo. Odio.
-
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis nobis
-              aperiam est praesentium, quos iste consequuntur omnis exercitationem quam
-              velit labore vero culpa ad mollitia? Quis architecto ipsam nemo. Odio.
-            """
-    },
-    {
         "slug": "programming-is-fun",
         "image": "coding.png",
         "author": "Maximilian",
@@ -113,4 +92,12 @@ def posts_page(request):
 
 
 def post_detail(request, slug):
-    return render(request, 'blog/post-details.html')
+    # simple searching algorithm
+    chosen_post = None
+    for post in posts:
+        if post['slug'] == slug:
+            chosen_post = post
+
+    return render(request, 'blog/post-details.html', {
+        'post': chosen_post
+    })

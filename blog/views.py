@@ -106,7 +106,10 @@ def starting_page(request):
 
 
 def posts_page(request):
-    return render(request, 'blog/all-posts.html')
+    sorted_posts = sorted(posts, key=get_date)
+    return render(request, 'blog/all-posts.html', {
+        'posts': sorted_posts
+    })
 
 
 def post_detail(request, slug):

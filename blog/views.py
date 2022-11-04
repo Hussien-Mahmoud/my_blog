@@ -6,7 +6,7 @@ from .models import Author, Post, Tag
 
 
 def starting_page(request):
-    sorted_posts = Post.objects.all().order_by('date')
+    sorted_posts = Post.objects.all().order_by('-date')
     # sorted_posts = sorted(posts, key=lambda post: post.get('date'))
     latest_posts = sorted_posts[0:3]
     return render(request, 'blog/index.html', {
@@ -15,7 +15,7 @@ def starting_page(request):
 
 
 def posts_page(request):
-    sorted_posts = Post.objects.all().order_by('date')
+    sorted_posts = Post.objects.all().order_by('-date')
     return render(request, 'blog/all-posts.html', {
         'posts': sorted_posts
     })

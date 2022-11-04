@@ -23,7 +23,7 @@ class Post(models.Model):
     title = models.CharField(max_length=150)
     excerpt = models.TextField()
     content = models.TextField()
-    image_name = models.CharField(max_length=100)
+    image = models.CharField(max_length=100)
     date = models.DateField(auto_now=True, editable=False)
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='posts')
     tags = models.ManyToManyField(Tag, related_name='posts', blank=True)

@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from django.utils.text import slugify
 
 
 # Create your models here.
@@ -20,7 +21,8 @@ class Author(models.Model):
 
 class Post(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=150)
+    slug = models.SlugField(unique=True, db_index=True, editable=False)
+    title = models.CharField(max_length=150, unique=True)
     excerpt = models.TextField()
     content = models.TextField()
     image = models.CharField(max_length=100)
@@ -30,3 +32,9 @@ class Post(models.Model):
 
     def __str__(self):
         return f'{self.uuid}: {self.title}'
+
+    def save(
+        self, force_insert=False, force_update=False, using=None, update_fields=None
+    ):
+        self.slug = slugify(self.title)
+        super(Post, self).save(force_insert, force_update, using, update_fields)

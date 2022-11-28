@@ -21,8 +21,8 @@ def posts_page(request):
     })
 
 
-def post_detail(request, uuid):
-    chosen_post = Post.objects.get(uuid=uuid)
+def post_detail(request, slug):
+    chosen_post = Post.objects.get(slug=slug)
     return render(request, 'blog/post-details.html', {
         'post': chosen_post
     })

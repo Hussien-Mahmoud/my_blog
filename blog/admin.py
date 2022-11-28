@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Author, Post, Tag
+# from .forms import PostForm
 
 # Register your models here.
 
@@ -9,6 +10,7 @@ class AuthorAdmin(admin.ModelAdmin):
 
 
 class PostAdmin(admin.ModelAdmin):
+    # form = PostForm   # can use specific form instead of default
     pass
 
 

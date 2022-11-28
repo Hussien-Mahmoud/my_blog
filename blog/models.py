@@ -1,6 +1,10 @@
 import uuid
+
+import django.db
 from django.db import models
 from django.utils.text import slugify
+from django import forms
+from django.core.exceptions import ValidationError
 
 
 # Create your models here.
@@ -38,3 +42,11 @@ class Post(models.Model):
     ):
         self.slug = slugify(self.title)
         super(Post, self).save(force_insert, force_update, using, update_fields)
+
+    def clean(self):
+        slug = slugify(self.title)
+        try:
+            Post.objects.get(slug=slug)  # raise error when nothing found
+            raise forms.ValidationError({'title': "this name can't be slugified because it is used before"})
+        except Post.DoesNotExist:
+            pass

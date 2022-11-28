@@ -29,7 +29,7 @@ class Post(models.Model):
     title = models.CharField(max_length=150, unique=True)
     excerpt = models.TextField()
     content = models.TextField()
-    image = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='post_images')
     date = models.DateField(auto_now=True, editable=False)
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='posts')
     tags = models.ManyToManyField(Tag, related_name='posts', blank=True)
@@ -46,7 +46,12 @@ class Post(models.Model):
     def clean(self):
         slug = slugify(self.title)
         try:
-            Post.objects.get(slug=slug)  # raise error when nothing found
-            raise forms.ValidationError({'title': "this name can't be slugified because it is used before"})
+            Post.objects.get(slug=slug)  # raise error when nothing found (new slug)
+            try:
+                Post.objects.get(uuid=self.uuid)    # raise error when uuid not in db (new entity)
+            except Post.DoesNotExist:
+                # only if the slug is old
+                # and the entity is new
+                raise forms.ValidationError({'title': "this name can't be slugified because it is used before"})
         except Post.DoesNotExist:
             pass

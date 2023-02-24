@@ -31,9 +31,10 @@ def post_detail(request, slug):
             # --------getting or making a new user--------
             data = comment_form.cleaned_data
             user, _ = User.objects.get_or_create(
-                name=data.get('name'),
                 email=data.get('email'),
             )
+            user.name = data.get('name')
+            user.save()
             # --------------------------------------------
 
             # --------checking the post parameter--------
@@ -55,7 +56,9 @@ def post_detail(request, slug):
             return HttpResponseBadRequest()
 
     chosen_post = Post.objects.get(slug=slug)
+    comments = Comment.objects.filter(post=chosen_post)
     return render(request, 'blog/post-details.html', {
         'post': chosen_post,
         'comment': CommentForm,
+        'posted_comments': comments
     })

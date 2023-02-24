@@ -12,6 +12,8 @@ from django.core.exceptions import ValidationError
 
 class Tag(models.Model):
     caption = models.CharField(max_length=20)
+    def __str__(self):
+        return self.caption
 
 
 class Author(models.Model):
@@ -55,3 +57,19 @@ class Post(models.Model):
                 raise forms.ValidationError({'title': "this name can't be slugified because it is used before"})
         except Post.DoesNotExist:
             pass
+
+
+class User(models.Model):
+    name = models.CharField(max_length=200, null=True)
+    email = models.EmailField(unique=True)
+
+    def __str__(self):
+        return self.name
+
+class Comment(models.Model):
+    text = models.TextField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+
+    def __str__(self):
+        return f'from "{self.user.name}" on post "{self.post.title}"'

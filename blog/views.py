@@ -56,9 +56,9 @@ def post_detail(request, slug):
             return HttpResponseBadRequest()
 
     chosen_post = Post.objects.get(slug=slug)
-    comments = Comment.objects.filter(post=chosen_post)
+    comments = Comment.objects.filter(post=chosen_post).order_by('-id')
     return render(request, 'blog/post-details.html', {
         'post': chosen_post,
-        'comment': CommentForm,
-        'posted_comments': comments
+        'comment_form': CommentForm,
+        'comments': comments
     })

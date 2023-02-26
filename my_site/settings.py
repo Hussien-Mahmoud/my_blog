@@ -38,7 +38,7 @@ SECRET_KEY = 'django-insecure-tinvz4c2q$^01ijx^m_n)0eb+3trmn+c4-_od&z3lwf)eo55_d
 DEBUG = False if environ.get('debug') == 'false' else True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = ["https://myblog-production-f3b6.up.railway.app/"]
+CSRF_TRUSTED_ORIGINS = ["https://myblog-production-f3b6.up.railway.app"]
 
 
 # Application definition

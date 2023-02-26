@@ -16,8 +16,11 @@ from os import environ
 import json
 
 CREDENTIALS = None
-with open('credentials.json', 'r') as file:
-    CREDENTIALS = json.loads(file.read())
+try:
+    with open('credentials.json', 'r') as file:
+        CREDENTIALS = json.loads(file.read())
+except:
+    pass
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

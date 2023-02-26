@@ -11,6 +11,14 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+from google.oauth2 import service_account
+from os import environ
+import json
+
+CREDENTIALS = None
+with open('credentials.json', 'r') as file:
+    CREDENTIALS = json.loads(file.read())
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,9 +31,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-tinvz4c2q$^01ijx^m_n)0eb+3trmn+c4-_od&z3lwf)eo55_d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = environ.get('debug') or True
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = []
 
 
 # Application definition
@@ -121,6 +130,7 @@ USE_TZ = True
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = 'static/'
+STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
@@ -134,3 +144,27 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = BASE_DIR / 'uploads'
 MEDIA_URL = '/files/'
+
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+
+if DEBUG:
+    GS_BUCKET_NAME = CREDENTIALS['gs_bucket_name']
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+        "credentials.json"
+    )
+else:
+    GS_BUCKET_NAME = environ['gs_bucket_name']
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_info(
+        {
+            "type": environ["type"],
+            "project_id": environ["project_id"],
+            "private_key_id": environ["private_key_id"],
+            "private_key": environ["private_key"],
+            "client_email": environ["client_email"],
+            "client_id": environ["client_id"],
+            "auth_uri": environ["auth_uri"],
+            "token_uri": environ["token_uri"],
+            "auth_provider_x509_cert_url": environ["auth_provider_x509_cert_url"],
+            "client_x509_cert_url": environ["client_x509_cert_url"],
+        }
+    )

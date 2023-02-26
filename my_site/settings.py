@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 from google.oauth2 import service_account
-from os import environ
+from google.auth.exceptions import InvalidValue
+from os import environ, path
 import json
 
 CREDENTIALS = None
@@ -37,7 +38,7 @@ SECRET_KEY = 'django-insecure-tinvz4c2q$^01ijx^m_n)0eb+3trmn+c4-_od&z3lwf)eo55_d
 DEBUG = False if environ.get('debug') == 'false' else True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = []
+CSRF_TRUSTED_ORIGINS = ["https://myblog-production-f3b6.up.railway.app/"]
 
 
 # Application definition
@@ -150,24 +151,28 @@ MEDIA_URL = '/files/'
 
 DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 
-if DEBUG:
+try:
+    GS_BUCKET_NAME = environ.get('gs_bucket_name')
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_info(
+        {
+            "type": environ.get("type"),
+            "project_id": environ.get("project_id"),
+            "private_key_id": environ.get("private_key_id"),
+            "private_key": environ.get("private_key"),
+            "client_email": environ.get("client_email"),
+            "client_id": environ.get("client_id"),
+            "auth_uri": environ.get("auth_uri"),
+            "token_uri": environ.get("token_uri"),
+            "auth_provider_x509_cert_url": environ.get("auth_provider_x509_cert_url"),
+            "client_x509_cert_url": environ.get("client_x509_cert_url"),
+        }
+    )
+except InvalidValue:
+    pass
+
+
+if DEBUG and path.exists("credentials.json"):
     GS_BUCKET_NAME = CREDENTIALS['gs_bucket_name']
     GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
         "credentials.json"
-    )
-else:
-    GS_BUCKET_NAME = environ['gs_bucket_name']
-    GS_CREDENTIALS = service_account.Credentials.from_service_account_info(
-        {
-            "type": environ["type"],
-            "project_id": environ["project_id"],
-            "private_key_id": environ["private_key_id"],
-            "private_key": environ["private_key"],
-            "client_email": environ["client_email"],
-            "client_id": environ["client_id"],
-            "auth_uri": environ["auth_uri"],
-            "token_uri": environ["token_uri"],
-            "auth_provider_x509_cert_url": environ["auth_provider_x509_cert_url"],
-            "client_x509_cert_url": environ["client_x509_cert_url"],
-        }
     )

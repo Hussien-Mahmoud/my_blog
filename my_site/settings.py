@@ -134,7 +134,6 @@ USE_TZ = True
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATIC_URL = 'static/'
-STATICFILES_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
@@ -149,7 +148,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT = BASE_DIR / 'uploads'
 MEDIA_URL = '/files/'
 
-DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+    }
+}
 
 try:
     GS_BUCKET_NAME = environ.get('gs_bucket_name')
